@@ -1,6 +1,13 @@
 export type UserRole = 'admin' | 'user';
 export type AuthProviderType = 'local' | 'github';
 
+export interface UserLicense {
+  readonly site_key: string;
+  readonly client_name: string;
+  readonly allowed_domain: string;
+  readonly is_active?: number;
+}
+
 export interface UserSession {
   readonly id: string;
   readonly name: string;
@@ -11,6 +18,7 @@ export interface UserSession {
   readonly githubUsername?: string;
   readonly avatarUrl?: string;
   readonly token?: string;
+  readonly license?: UserLicense;
   readonly siteKey?: string;
   readonly clientName?: string;
   readonly createdAt: string;

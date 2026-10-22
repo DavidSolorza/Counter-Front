@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { Shield, Key, Globe, Power } from 'lucide-react';
+import { useAuth, useActiveSiteKey } from '../../auth/application/auth_context';
 import './LicenseManagementCard.css';
 
 export const LicenseManagementCard: React.FC = () => {
+  const { session } = useAuth();
+  const activeSiteKey = useActiveSiteKey();
   const [isActive, setIsActive] = useState(true);
   const [killSwitchTriggered, setKillSwitchTriggered] = useState(false);
+
+  const clientName = session?.license?.client_name || session?.clientName || 'DavidSolorza';
+  const allowedDomain = session?.license?.allowed_domain || 'localhost:5175, 127.0.0.1';
 
   const handleToggleKillSwitch = () => {
     setIsActive((prev) => !prev);
@@ -32,14 +38,14 @@ export const LicenseManagementCard: React.FC = () => {
       <div className="license-details-grid">
         <div className="license-field">
           <span className="field-label">Cliente / Razón Social:</span>
-          <strong>Streaming Store JP</strong>
+          <strong>{clientName}</strong>
         </div>
 
         <div className="license-field">
-          <span className="field-label">Token Público (Site Key):</span>
+          <span className="field-label">Token Público (Site Key Única):</span>
           <code className="field-code">
             <Key size={11} />
-            wk_live_demo
+            {activeSiteKey}
           </code>
         </div>
 
@@ -47,7 +53,7 @@ export const LicenseManagementCard: React.FC = () => {
           <span className="field-label">Dominios Autorizados:</span>
           <span className="domain-pill">
             <Globe size={11} />
-            localhost:5175, 127.0.0.1
+            {allowedDomain}
           </span>
         </div>
 

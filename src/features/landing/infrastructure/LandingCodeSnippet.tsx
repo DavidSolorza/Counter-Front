@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Copy, Check, Terminal } from 'lucide-react';
+import { Copy, Check, Terminal, Key } from 'lucide-react';
 import { APP_CONFIG } from '../../../core/config/app_config';
+import { useActiveSiteKey } from '../../auth/application/auth_context';
 import './LandingCodeSnippet.css';
 
 export const LandingCodeSnippet: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const snippet = `<script src="${APP_CONFIG.apiBaseUrl.replace('/api/v1', '')}/counter.js" data-site-key="wk_live_demo" async></script>`;
+  const activeSiteKey = useActiveSiteKey();
+  const snippet = `<script src="${APP_CONFIG.apiBaseUrl.replace('/api/v1', '')}/counter.js" data-site-key="${activeSiteKey}" async></script>`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(snippet);
@@ -18,7 +20,13 @@ export const LandingCodeSnippet: React.FC = () => {
       <div className="snippet-card">
         <div className="snippet-card-header">
           <div>
-            <span className="snippet-badge">Instalación Frontend</span>
+            <div className="snippet-badge-wrap">
+              <span className="snippet-badge">Instalación Frontend</span>
+              <span className="snippet-key-chip">
+                <Key size={11} />
+                <code>{activeSiteKey}</code>
+              </span>
+            </div>
             <h3>Integración en 1 Línea de Código</h3>
           </div>
           <button type="button" className="btn-copy" onClick={handleCopy}>

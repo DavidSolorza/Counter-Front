@@ -21,13 +21,30 @@
   gap: 12px;
 }
 
+.snippet-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
 .snippet-badge {
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--brand-primary);
-  display: block;
-  margin-bottom: 4px;
+}
+
+.snippet-key-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f1f5f9;
+  color: #0284c7;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: var(--font-mono);
 }
 
 .snippet-card-header h3 {

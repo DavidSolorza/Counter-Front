@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { RefreshCw, Key, ShieldCheck } from 'lucide-react';
-import { useAuth } from '../../auth/application/auth_context';
+import { useActiveSiteKey } from '../../auth/application/auth_context';
 import { analyticsService } from '../application/analytics_service';
 import { AnalyticsOverviewData, RawTelemetryEvent } from '../domain/analytics_types';
 import { AnalyticsKpiGrid } from './AnalyticsKpiGrid';
@@ -11,8 +11,7 @@ import { TelemetryEventsTable } from './TelemetryEventsTable';
 import './UserAnalyticsDashboard.css';
 
 export const UserAnalyticsDashboard: React.FC = () => {
-  const { session } = useAuth();
-  const siteKey = session?.siteKey || localStorage.getItem('__cntr_site_key') || 'wk_live_demo';
+  const siteKey = useActiveSiteKey();
   const [data, setData] = useState<AnalyticsOverviewData | null>(null);
   const [events, setEvents] = useState<RawTelemetryEvent[]>([]);
   const [isLoading, setIsLoading] = useState(false);

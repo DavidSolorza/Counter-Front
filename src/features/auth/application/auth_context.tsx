@@ -24,8 +24,14 @@ const INITIAL_ADMIN_SESSION: UserSession = {
   provider: 'github',
   githubUsername: 'DavidSolorza',
   avatarUrl: 'https://github.com/DavidSolorza.png',
-  siteKey: 'wk_live_demo',
-  clientName: 'Streaming Store JP',
+  license: {
+    site_key: 'cntr_davidsolorza_live',
+    client_name: 'DavidSolorza',
+    allowed_domain: '*',
+    is_active: 1,
+  },
+  siteKey: 'cntr_davidsolorza_live',
+  clientName: 'DavidSolorza',
   createdAt: '2026-10-22',
 };
 
@@ -49,11 +55,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsAuthModalOpen(false);
   };
 
-  const loginWithGithub = async (
-    role: UserRole,
-    username: string = 'DavidSolorza',
-    code?: string
-  ) => {
+  const loginWithGithub = async (role: UserRole, username = 'DavidSolorza', code?: string) => {
     setIsAuthenticating(true);
     try {
       const authData = await GithubAuthService.authenticate(role, username, code);
@@ -67,6 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         githubUsername: authData.user.username,
         avatarUrl: authData.user.avatar_url,
         token: authData.token,
+        license: authData.license,
         siteKey: authData.license.site_key,
         clientName: authData.license.client_name,
         createdAt: new Date().toISOString().split('T')[0],
@@ -123,8 +126,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 export const useAuth = (): AuthContextValue => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth debe ser utilizado dentro de un AuthProvider');
-  }
+  if (!context) throw new Error('useAuth debe ser utilizado dentro de un AuthProvider');
   return context;
+};
+
+export const useActiveSiteKey = (): string => {
+  const { session } = useAuth();
+  return (
+    session?.license?.site_key ||
+    session?.siteKey ||
+    localStorage.getItem('__cntr_site_key') ||
+    import.meta.env.VITE_DEFAULT_SITE_KEY ||
+    'wk_live_demo'
+  );
 };
