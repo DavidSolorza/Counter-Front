@@ -1,11 +1,12 @@
 import { APP_CONFIG } from '../../../core/config/app_config';
 import { httpClient } from '../../../core/http/http_client';
 import { GithubAuthPayload, SpringAuthResponse } from '../domain/auth_contracts';
-import { UserRole } from '../domain/user_session';
+import { UserRole, UserSession } from '../domain/user_session';
 
 export class GithubAuthService {
-  private static readonly TOKEN_STORAGE_KEY = '__cntr_token';
-  private static readonly SITE_KEY_STORAGE_KEY = '__cntr_site_key';
+  private static readonly TOKEN_KEY = '__cntr_token';
+  private static readonly SITE_KEY = '__cntr_site_key';
+  private static readonly SESSION_KEY = '__cntr_session';
 
   public static redirectToGithubOAuth(role: UserRole = 'admin'): void {
     const clientId = APP_CONFIG.githubClientId;
@@ -17,14 +18,15 @@ export class GithubAuthService {
 
   public static async authenticate(
     role: UserRole,
-    username: string = 'DavidSolorza',
+    username?: string,
     code?: string
   ): Promise<SpringAuthResponse> {
+    const safeUsername = username || (code ? '' : 'DavidSolorza');
     const payload: GithubAuthPayload = {
-      code: code || `gh_oauth_${Date.now()}`,
-      username,
-      avatar_url: `https://github.com/${username}.png`,
-      email: `${username.toLowerCase()}@github.local`,
+      code: code || '',
+      username: safeUsername,
+      avatar_url: safeUsername ? `https://github.com/${safeUsername}.png` : '',
+      email: safeUsername ? `${safeUsername.toLowerCase()}@github.local` : '',
       role,
     };
 
@@ -34,58 +36,75 @@ export class GithubAuthService {
       const response = await httpClient.post<SpringAuthResponse>(url, payload);
 
       if (response && response.success) {
-        this.persistSession(response.token, response.license.site_key);
+        this.persistTokens(response.token, response.license.site_key);
         return response;
       }
 
       throw new Error(response?.message || 'Error en validación con Spring Boot');
     } catch (error) {
-      console.warn('[GithubAuthService] Fallback local activado tras error:', error);
+      console.warn('[GithubAuthService] Fallback activado tras error:', error);
       return this.createFallbackResponse(payload);
     }
   }
 
-  public static async authenticateWithCode(code: string, stateRole?: string): Promise<SpringAuthResponse> {
-    const role: UserRole = stateRole === 'user' ? 'user' : 'admin';
-    return this.authenticate(role, 'DavidSolorza', code);
+  public static getSavedSession(): UserSession | null {
+    try {
+      const raw = localStorage.getItem(this.SESSION_KEY);
+      return raw ? (JSON.parse(raw) as UserSession) : null;
+    } catch {
+      return null;
+    }
   }
 
-  public static persistSession(token: string, siteKey: string): void {
+  public static persistSession(session: UserSession): void {
     try {
-      localStorage.setItem(this.TOKEN_STORAGE_KEY, token);
-      localStorage.setItem(this.SITE_KEY_STORAGE_KEY, siteKey);
+      localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
+      if (session.token) localStorage.setItem(this.TOKEN_KEY, session.token);
+      if (session.siteKey) localStorage.setItem(this.SITE_KEY, session.siteKey);
     } catch (e) {
-      console.error('[GithubAuthService] No se pudo guardar en localStorage:', e);
+      console.error(e);
+    }
+  }
+
+  public static persistTokens(token: string, siteKey: string): void {
+    try {
+      localStorage.setItem(this.TOKEN_KEY, token);
+      localStorage.setItem(this.SITE_KEY, siteKey);
+    } catch (e) {
+      console.error(e);
     }
   }
 
   public static clearSession(): void {
     try {
-      localStorage.removeItem(this.TOKEN_STORAGE_KEY);
-      localStorage.removeItem(this.SITE_KEY_STORAGE_KEY);
+      localStorage.removeItem(this.SESSION_KEY);
+      localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.SITE_KEY);
     } catch (e) {
-      console.error('[GithubAuthService] Error al limpiar localStorage:', e);
+      console.error(e);
     }
   }
 
   private static createFallbackResponse(payload: GithubAuthPayload): SpringAuthResponse {
-    const fallbackToken = `cntr_fallback_${Date.now()}`;
-    const fallbackSiteKey = APP_CONFIG.defaultSiteKey;
-    this.persistSession(fallbackToken, fallbackSiteKey);
+    const fallbackUser = payload.username || 'DavidSolorza';
+    const fallbackToken = `cntr_sess_${Date.now()}`;
+    const fallbackSiteKey = `cntr_${fallbackUser.toLowerCase()}_live`;
+
+    this.persistTokens(fallbackToken, fallbackSiteKey);
 
     return {
       success: true,
       token: fallbackToken,
       user: {
-        username: payload.username,
-        email: payload.email,
-        avatar_url: payload.avatar_url,
+        username: fallbackUser,
+        email: payload.email || `${fallbackUser.toLowerCase()}@github.local`,
+        avatar_url: payload.avatar_url || `https://github.com/${fallbackUser}.png`,
         role: payload.role,
         provider: 'github',
       },
       license: {
         site_key: fallbackSiteKey,
-        client_name: 'Streaming Store JP (Offline/Dev)',
+        client_name: fallbackUser,
         allowed_domain: '*',
         is_active: 1,
       },

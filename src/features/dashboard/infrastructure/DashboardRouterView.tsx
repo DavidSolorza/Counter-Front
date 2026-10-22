@@ -18,7 +18,7 @@ export const DashboardRouterView: React.FC = () => {
           <h2>Acceso Restringido al Panel</h2>
           <p>Debes autenticarte con una cuenta para explorar las vistas del sistema.</p>
           <button type="button" className="btn-unauth-login" onClick={openAuthModal}>
-            Iniciar Sesión con Cuenta Demo
+            Iniciar Sesión con GitHub
           </button>
         </div>
       </div>

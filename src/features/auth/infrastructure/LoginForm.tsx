@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Mail, X, ExternalLink } from 'lucide-react';
+import { Lock, Mail, X } from 'lucide-react';
 import { useAuth } from '../application/auth_context';
 import { UserRole } from '../domain/user_session';
 import { RoleSelector } from './RoleSelector';
@@ -32,12 +32,12 @@ export const LoginForm: React.FC = () => {
     login(defaultEmail, selectedRole);
   };
 
-  const handleGithubLogin = (selectedRole: UserRole) => {
-    loginWithGithub(selectedRole, 'DavidSolorza');
+  const handleRealGithubOAuth = (selectedRole: UserRole) => {
+    loginWithOAuthRedirect(selectedRole);
   };
 
-  const handleGithubOAuthRedirect = () => {
-    loginWithOAuthRedirect(role);
+  const handleDirectDemoLogin = () => {
+    loginWithGithub(role, 'DavidSolorza');
   };
 
   return (
@@ -49,12 +49,12 @@ export const LoginForm: React.FC = () => {
             <span>Acceso Seguro Enterprise</span>
           </div>
           <h2>Autenticación en Counter</h2>
-          <p>Selecciona tu rol e ingresa con GitHub o credenciales.</p>
+          <p>Conéctate con tu cuenta real de GitHub o ingresa con credenciales.</p>
         </div>
 
         <GithubLoginButton
           currentRole={role}
-          onGithubLogin={handleGithubLogin}
+          onGithubLogin={handleRealGithubOAuth}
           isLoading={isAuthenticating}
         />
 
@@ -62,11 +62,10 @@ export const LoginForm: React.FC = () => {
           <button
             type="button"
             className="btn-link-oauth"
-            onClick={handleGithubOAuthRedirect}
-            title="Redirigir al flujo oficial de autorización en GitHub.com"
+            onClick={handleDirectDemoLogin}
+            title="Iniciar sesión directa de prueba local sin salir a GitHub"
           >
-            <span>O abrir autorización en GitHub.com</span>
-            <ExternalLink size={11} />
+            <span>O probar sesión local demo (@DavidSolorza)</span>
           </button>
         </div>
 
