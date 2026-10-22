@@ -1,0 +1,31 @@
+.github-btn-wrap {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.btn-github-oauth {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 16px;
+  background: #24292f;
+  color: #ffffff;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.btn-github-oauth:hover {
+  background: #1a1e22;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.github-icon {
+  flex-shrink: 0;
+}

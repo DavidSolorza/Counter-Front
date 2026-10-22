@@ -3,10 +3,11 @@ import { Lock, Mail, X } from 'lucide-react';
 import { useAuth } from '../application/auth_context';
 import { UserRole } from '../domain/user_session';
 import { RoleSelector } from './RoleSelector';
+import { GithubLoginButton } from './GithubLoginButton';
 import './LoginForm.css';
 
 export const LoginForm: React.FC = () => {
-  const { login, isAuthModalOpen, closeAuthModal } = useAuth();
+  const { login, loginWithGithub, isAuthModalOpen, closeAuthModal } = useAuth();
   const [email, setEmail] = useState('admin@counter.io');
   const [role, setRole] = useState<UserRole>('admin');
 
@@ -24,6 +25,10 @@ export const LoginForm: React.FC = () => {
     login(defaultEmail, selectedRole);
   };
 
+  const handleGithubLogin = (selectedRole: UserRole) => {
+    loginWithGithub(selectedRole, 'DavidSolorza');
+  };
+
   return (
     <div className="auth-overlay" onClick={closeAuthModal}>
       <div className="auth-card" onClick={(e) => e.stopPropagation()}>
@@ -33,7 +38,16 @@ export const LoginForm: React.FC = () => {
             <span>Acceso Seguro Enterprise</span>
           </div>
           <h2>Autenticación en Counter</h2>
-          <p>Selecciona tu rol para explorar el panel operativo.</p>
+          <p>Selecciona tu rol e ingresa con GitHub o credenciales.</p>
+        </div>
+
+        <GithubLoginButton
+          currentRole={role}
+          onGithubLogin={handleGithubLogin}
+        />
+
+        <div className="auth-divider">
+          <span>o ingresa con correo corporativo</span>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">

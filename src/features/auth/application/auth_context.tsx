@@ -4,6 +4,7 @@ import { UserRole, UserSession } from '../domain/user_session';
 interface AuthContextValue {
   session: UserSession | null;
   login: (email: string, role: UserRole) => void;
+  loginWithGithub: (role: UserRole, username?: string) => void;
   logout: () => void;
   switchRole: (role: UserRole) => void;
   isAuthModalOpen: boolean;
@@ -13,10 +14,13 @@ interface AuthContextValue {
 
 const DEFAULT_ADMIN_SESSION: UserSession = {
   id: 'usr_admin_01',
-  name: 'Administrador Demo',
-  email: 'admin@counter.io',
+  name: 'David Solorza',
+  email: 'david@counter.io',
   role: 'admin',
   isAuthenticated: true,
+  provider: 'github',
+  githubUsername: 'DavidSolorza',
+  avatarUrl: 'https://github.com/DavidSolorza.png',
   createdAt: '2026-01-15',
 };
 
@@ -33,6 +37,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       email,
       role,
       isAuthenticated: true,
+      provider: 'local',
+      createdAt: new Date().toISOString().split('T')[0],
+    });
+    setIsAuthModalOpen(false);
+  };
+
+  const loginWithGithub = (role: UserRole, username: string = 'DavidSolorza') => {
+    setSession({
+      id: `gh_${Date.now()}`,
+      name: username === 'DavidSolorza' ? 'David Solorza' : username,
+      email: `${username.toLowerCase()}@github.com`,
+      role,
+      isAuthenticated: true,
+      provider: 'github',
+      githubUsername: username,
+      avatarUrl: `https://github.com/${username}.png`,
       createdAt: new Date().toISOString().split('T')[0],
     });
     setIsAuthModalOpen(false);
@@ -47,7 +67,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setSession({
       ...session,
       role: newRole,
-      name: newRole === 'admin' ? 'Administrador Sistema' : 'Analista Estándar',
     });
   };
 
@@ -56,6 +75,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       value={{
         session,
         login,
+        loginWithGithub,
         logout,
         switchRole,
         isAuthModalOpen,

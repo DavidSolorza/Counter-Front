@@ -90,7 +90,21 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               </button>
 
               <div className="user-profile-badge">
-                <span className="user-email-text">{session.email}</span>
+                {session.avatarUrl ? (
+                  <img
+                    src={session.avatarUrl}
+                    alt={session.name}
+                    className="user-github-avatar"
+                  />
+                ) : null}
+                <div className="user-meta-texts">
+                  <span className="user-name-text">
+                    {session.githubUsername ? `@${session.githubUsername}` : session.name}
+                  </span>
+                  {session.provider === 'github' && (
+                    <span className="github-verified-tag">GitHub</span>
+                  )}
+                </div>
               </div>
 
               <button

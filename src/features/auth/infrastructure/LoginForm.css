@@ -54,6 +54,26 @@
   margin-bottom: 20px;
 }
 
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 14px 0 16px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.auth-divider span {
+  padding: 0 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;
