@@ -41,59 +41,52 @@
   margin-bottom: 12px;
 }
 
-.auth-header h2 {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 6px;
+.auth-header h2 { font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+.auth-header p { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; }
+
+.oauth-redirect-link-wrap {
+  text-align: center;
+  margin-top: -8px;
+  margin-bottom: 12px;
 }
 
-.auth-header p {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-bottom: 20px;
+.btn-link-oauth {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.btn-link-oauth:hover {
+  color: var(--brand-primary);
+  background: var(--brand-subtle);
 }
 
 .auth-divider {
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 14px 0 16px 0;
+  margin: 12px 0 14px 0;
 }
 
-.auth-divider::before,
-.auth-divider::after {
+.auth-divider::before, .auth-divider::after {
   content: '';
   flex: 1;
   border-bottom: 1px solid var(--border-light);
 }
 
-.auth-divider span {
-  padding: 0 10px;
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-group label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
+.auth-divider span { padding: 0 10px; font-size: 11px; color: var(--text-muted); }
+.auth-form { display: flex; flex-direction: column; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
 
 .form-group input {
   padding: 10px 14px;
@@ -105,26 +98,21 @@
   transition: border-color var(--transition-fast);
 }
 
-.form-group input:focus {
-  border-color: var(--border-focus);
-  background: #ffffff;
-}
+.form-group input:focus { border-color: var(--border-focus); background: #ffffff; }
 
 .btn-submit {
-  margin-top: 8px;
-  padding: 12px;
+  margin-top: 6px;
+  padding: 11px;
   background: var(--brand-primary);
   color: #ffffff;
   border-radius: var(--radius-sm);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   transition: background var(--transition-fast);
   cursor: pointer;
 }
 
-.btn-submit:hover {
-  background: var(--brand-hover);
-}
+.btn-submit:hover { background: var(--brand-hover); }
 
 .auth-close-btn {
   position: absolute;
@@ -140,7 +128,4 @@
   transition: all var(--transition-fast);
 }
 
-.auth-close-btn:hover {
-  background: var(--bg-subtle);
-  color: var(--text-primary);
-}
+.auth-close-btn:hover { background: var(--bg-subtle); color: var(--text-primary); }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { UserRole, UserSession } from '../domain/user_session';
 import { GithubAuthService } from './github_auth_service';
 
@@ -6,7 +6,8 @@ interface AuthContextValue {
   session: UserSession | null;
   isAuthenticating: boolean;
   login: (email: string, role: UserRole) => void;
-  loginWithGithub: (role: UserRole, username?: string) => Promise<void>;
+  loginWithGithub: (role: UserRole, username?: string, code?: string) => Promise<void>;
+  loginWithOAuthRedirect: (role: UserRole) => void;
   logout: () => void;
   switchRole: (role: UserRole) => void;
   isAuthModalOpen: boolean;
@@ -48,10 +49,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsAuthModalOpen(false);
   };
 
-  const loginWithGithub = async (role: UserRole, username: string = 'DavidSolorza') => {
+  const loginWithGithub = async (
+    role: UserRole,
+    username: string = 'DavidSolorza',
+    code?: string
+  ) => {
     setIsAuthenticating(true);
     try {
-      const authData = await GithubAuthService.authenticate(role, username);
+      const authData = await GithubAuthService.authenticate(role, username, code);
       setSession({
         id: authData.token,
         name: authData.user.username === 'DavidSolorza' ? 'David Solorza' : authData.user.username,
@@ -72,6 +77,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const loginWithOAuthRedirect = (role: UserRole) => {
+    GithubAuthService.redirectToGithubOAuth(role);
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const state = params.get('state') as UserRole;
+    if (code) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      loginWithGithub(state === 'user' ? 'user' : 'admin', 'DavidSolorza', code);
+    }
+  }, []);
+
   const logout = () => {
     GithubAuthService.clearSession();
     setSession(null);
@@ -89,6 +108,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAuthenticating,
         login,
         loginWithGithub,
+        loginWithOAuthRedirect,
         logout,
         switchRole,
         isAuthModalOpen,

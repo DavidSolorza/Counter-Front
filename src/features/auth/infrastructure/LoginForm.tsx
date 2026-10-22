@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Mail, X } from 'lucide-react';
+import { Lock, Mail, X, ExternalLink } from 'lucide-react';
 import { useAuth } from '../application/auth_context';
 import { UserRole } from '../domain/user_session';
 import { RoleSelector } from './RoleSelector';
@@ -7,7 +7,14 @@ import { GithubLoginButton } from './GithubLoginButton';
 import './LoginForm.css';
 
 export const LoginForm: React.FC = () => {
-  const { login, loginWithGithub, isAuthenticating, isAuthModalOpen, closeAuthModal } = useAuth();
+  const {
+    login,
+    loginWithGithub,
+    loginWithOAuthRedirect,
+    isAuthenticating,
+    isAuthModalOpen,
+    closeAuthModal,
+  } = useAuth();
   const [email, setEmail] = useState('admin@counter.io');
   const [role, setRole] = useState<UserRole>('admin');
 
@@ -29,6 +36,10 @@ export const LoginForm: React.FC = () => {
     loginWithGithub(selectedRole, 'DavidSolorza');
   };
 
+  const handleGithubOAuthRedirect = () => {
+    loginWithOAuthRedirect(role);
+  };
+
   return (
     <div className="auth-overlay" onClick={closeAuthModal}>
       <div className="auth-card" onClick={(e) => e.stopPropagation()}>
@@ -46,6 +57,18 @@ export const LoginForm: React.FC = () => {
           onGithubLogin={handleGithubLogin}
           isLoading={isAuthenticating}
         />
+
+        <div className="oauth-redirect-link-wrap">
+          <button
+            type="button"
+            className="btn-link-oauth"
+            onClick={handleGithubOAuthRedirect}
+            title="Redirigir al flujo oficial de autorización en GitHub.com"
+          >
+            <span>O abrir autorización en GitHub.com</span>
+            <ExternalLink size={11} />
+          </button>
+        </div>
 
         <div className="auth-divider">
           <span>o ingresa con correo corporativo</span>

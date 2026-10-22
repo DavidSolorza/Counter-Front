@@ -7,12 +7,21 @@ export class GithubAuthService {
   private static readonly TOKEN_STORAGE_KEY = '__cntr_token';
   private static readonly SITE_KEY_STORAGE_KEY = '__cntr_site_key';
 
+  public static redirectToGithubOAuth(role: UserRole = 'admin'): void {
+    const clientId = APP_CONFIG.githubClientId;
+    const redirectUri = encodeURIComponent(window.location.origin);
+    const scope = encodeURIComponent('read:user user:email');
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${role}`;
+    window.location.href = authUrl;
+  }
+
   public static async authenticate(
     role: UserRole,
-    username: string = 'DavidSolorza'
+    username: string = 'DavidSolorza',
+    code?: string
   ): Promise<SpringAuthResponse> {
     const payload: GithubAuthPayload = {
-      code: `gh_oauth_${Date.now()}`,
+      code: code || `gh_oauth_${Date.now()}`,
       username,
       avatar_url: `https://github.com/${username}.png`,
       email: `${username.toLowerCase()}@github.local`,
@@ -34,6 +43,11 @@ export class GithubAuthService {
       console.warn('[GithubAuthService] Fallback local activado tras error:', error);
       return this.createFallbackResponse(payload);
     }
+  }
+
+  public static async authenticateWithCode(code: string, stateRole?: string): Promise<SpringAuthResponse> {
+    const role: UserRole = stateRole === 'user' ? 'user' : 'admin';
+    return this.authenticate(role, 'DavidSolorza', code);
   }
 
   public static persistSession(token: string, siteKey: string): void {
