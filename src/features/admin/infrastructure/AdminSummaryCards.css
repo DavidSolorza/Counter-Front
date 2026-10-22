@@ -1,0 +1,91 @@
+.admin-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.summary-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.summary-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.summary-icon-wrap {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-total {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.icon-active {
+  background: var(--status-active-bg);
+  color: var(--status-active-text);
+}
+
+.icon-inactive {
+  background: var(--status-inactive-bg);
+  color: var(--status-inactive-text);
+}
+
+.icon-cancelled {
+  background: var(--status-cancelled-bg);
+  color: var(--status-cancelled-text);
+}
+
+.summary-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.summary-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.text-active {
+  color: var(--status-active-text);
+}
+
+.text-inactive {
+  color: var(--status-inactive-text);
+}
+
+.text-cancelled {
+  color: var(--status-cancelled-text);
+}

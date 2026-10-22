@@ -1,0 +1,105 @@
+.events-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.events-header {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.events-title-wrap h3 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.events-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.events-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.live-icon {
+  animation: livePulse 1.6s infinite ease-in-out;
+}
+
+@keyframes livePulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.events-table th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.events-table td {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 12px;
+}
+
+.ev-id {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.ev-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+}
+
+.pill-click { background: #dbeafe; color: #1d4ed8; }
+.pill-rage_click { background: #ffedd5; color: #c2410c; }
+.pill-page_view { background: #e0f2fe; color: #0369a1; }
+.pill-client_error { background: #fee2e2; color: #b91c1c; }
+.pill-scroll_milestone { background: #f3e8ff; color: #7e22ce; }
+
+.ev-target { font-weight: 600; color: var(--text-primary); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ev-path { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+.ev-device { color: #64748b; font-size: 11px; }
+.ev-time { color: var(--text-muted); font-size: 11px; }
+
+.empty-events-state {
+  text-align: center;
+  padding: 30px !important;
+  color: var(--text-muted);
+  font-style: italic;
+}

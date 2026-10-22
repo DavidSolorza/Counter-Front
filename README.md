@@ -1,51 +1,64 @@
-# ⚡ Counter-Front: Frontend y Landing Page Desacoplada
+# ⚡ Counter-Front: Frontend React 19 Desacoplado
 
-Interfaz de usuario independiente y panel de control en **Modo Claro** para la plataforma de analítica y observabilidad empresarial **Counter**.
-
----
-
-## 🏛️ Arquitectura Desacoplada
-
-Este proyecto está 100% aislado del motor de backend y base de datos:
-- **Repositorio Backend:** [DavidSolorza/Counter](https://github.com/DavidSolorza/Counter.git)
-- **Repositorio Frontend:** [DavidSolorza/Counter-Front](https://github.com/DavidSolorza/Counter-Front.git)
-- **Canal de Comunicación Exclusivo:** HTTP REST a través de `/api/v1/` (`http://127.0.0.1:5000/api/v1`).
+Frontend de observabilidad empresarial y telemetría web construido con **React 19 + TypeScript + Vite**, siguiendo una arquitectura de diseño por **Rebanadas Verticales (Vertical Slicing)** y sistema visual en **Modo Claro (Ultra-Light Modern Mode)**.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 🏛️ Estructura del Proyecto
 
 ```text
 Counter-Front/
-├── .gitignore               # Exclusión estricta de dependencias node y código backend
-├── index.html               # Landing page corporativa y guía de integración
-├── dashboard.html           # Panel analítico en vivo en Modo Claro
-├── styles/
-│   └── main.css             # Sistema de diseño Modo Claro (< 150 líneas)
-├── scripts/
-│   ├── api_client.js        # Consumo de endpoints REST del backend (< 150 líneas)
-│   ├── visual_wireframe.js  # Renderizado de componentes DOM inertes (< 150 líneas)
-│   └── dashboard.js         # Orquestación y polleo del dashboard (< 150 líneas)
-└── README.md                # Documentación del frontend
+├── docs/
+│   ├── proposals/       # Propuestas técnicas (PROP-2026-001)
+│   ├── architecture/    # ADRs y diagramas Mermaid de arquitectura
+│   └── reports/         # Informes de auditoría y ejecución
+├── src/
+│   ├── core/
+│   │   ├── config/      # Constantes globales (<150 líneas)
+│   │   ├── layout/      # Navbar principal y conmutador de roles (<150 líneas)
+│   │   └── theme/       # Tokens de tema claro y reset CSS (<150 líneas)
+│   └── features/
+│       ├── landing/     # Landing informativa, hero, características y snippet
+│       ├── auth/        # Contexto de sesión, modal de login y selector de roles
+│       ├── admin/       # Panel administrador, tarjetas KPI y gestión de usuarios
+│       ├── analytics/   # Panel de usuario con telemetría en tiempo real
+│       └── dashboard/   # Enrutador de vista según rol asignado
+├── index.html           # Punto de entrada HTML con Google Fonts
+├── package.json
+└── vite.config.ts
 ```
+
+---
+
+## 👥 Roles y Funcionalidades
+
+1. **🌐 Landing Page Informativa:**
+   - Hero con métricas de confianza y accesos directos al panel.
+   - Cuadrícula de capacidades tecnológicas (0% latencia, rage clicks, DOM snapshots, protección PII).
+   - Bloque de instalación de 1 línea con botón interactivo de copiado.
+
+2. **👑 Rol Administrador (`admin`):**
+   - 4 Tarjetas de resumen en vivo: Total Cuentas, Activos, Inactivos, Cancelados.
+   - Tabla reactiva de usuarios con búsqueda en tiempo real y filtros por estado.
+   - Controles de acción: **Activar / Desactivar** (pausa reversible) y **Cancelar Cuenta** (con soporte de reactivación).
+
+3. **👤 Rol Usuario / Analista (`user`):**
+   - Panel de observabilidad y diagnóstico UX.
+   - Métricas de sesiones rastreadas, fricción de rage clicks y latencias keepalive.
+   - Flujo de eventos de telemetría en vivo con insignias por categoría.
 
 ---
 
 ## 🚀 Cómo Ejecutar Localmente
 
-Puedes servir este proyecto con cualquier servidor HTTP estático:
-
-### Con Node / npx:
+### 1. Iniciar Servidor de Desarrollo:
 ```bash
-npx serve .
+npm run dev
 ```
+Abre en tu navegador `http://localhost:5174/` (o el puerto indicado por Vite).
 
-### Con Python:
+### 2. Compilar para Producción:
 ```bash
-python -m http.server 3000
+npm run build
 ```
-
-### Con Live Server (VS Code):
-Haz clic derecho en `index.html` y selecciona **"Open with Live Server"**.
-
-Abre tu navegador en `http://localhost:3000` (o el puerto asignado) para visualizar la Landing Page y el Dashboard.
+Genera los bundles estáticos optimizados en la carpeta `dist/`.

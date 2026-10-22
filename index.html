@@ -1,65 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <title>Counter - Enterprise Intelligence Platform</title>
-    <link rel="stylesheet" href="styles/main.css">
-</head>
-<body>
-    <div class="topbar">
-        <div class="brand">⚡ Counter Intelligence</div>
-        <div style="display: flex; gap: 8px;">
-            <a href="dashboard.html" class="btn btn-primary">📊 Ir al Dashboard</a>
-            <a href="http://127.0.0.1:5000/download/counter.js" class="btn">📥 Descargar SDK</a>
-            <button class="btn" onclick="document.getElementById('c-modal').style.display='flex'">✉️ Soporte & API</button>
-        </div>
-    </div>
-
-    <div class="hero">
-        <span class="badge b-click" style="margin-bottom: 12px;">v3.1.0 Enterprise SDK Ready</span>
-        <h1>Observabilidad y Telemetría Web Ultraligera</h1>
-        <p>Captura comportamiento de usuario, fricción por rage clicks y estados visuales del DOM en tiempo real, con impacto cero en la velocidad de tu sitio web.</p>
-        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 18px;">
-            <a href="dashboard.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px;">Explorar Panel en Vivo</a>
-            <a href="http://127.0.0.1:5000/download/counter.js" class="btn" style="padding: 10px 20px; font-size: 13px;">Descargar counter.js</a>
-        </div>
-    </div>
-
-    <div class="grid4" style="max-width: 1000px; margin: 0 auto 30px auto;">
-        <div class="card">
-            <h4>⚡ 0% Latencia</h4>
-            <p style="color: var(--muted); font-size: 11px; margin-top: 6px;">Eventos encolados pasivamente y despachados vía keepalive y sendBeacon.</p>
-        </div>
-        <div class="card">
-            <h4>🔥 Rage Clicks</h4>
-            <p style="color: var(--muted); font-size: 11px; margin-top: 6px;">Detección instantánea de frustración del usuario en botones o enlaces.</p>
-        </div>
-        <div class="card">
-            <h4>🎨 Snapshots Visuales</h4>
-            <p style="color: var(--muted); font-size: 11px; margin-top: 6px;">Wireframing inerte del componente interactuado para auditoría rápida.</p>
-        </div>
-        <div class="card">
-            <h4>🛡️ Protección PII</h4>
-            <p style="color: var(--muted); font-size: 11px; margin-top: 6px;">Censura algorítmica de contraseñas, tarjetas y datos confidenciales.</p>
-        </div>
-    </div>
-
-    <div class="card" style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <h4>Instalación Rápida en Cualquier Frontend</h4>
-        <p style="color: var(--muted); font-size: 12px; margin: 8px 0 12px 0;">Copia y pega este snippet antes de cerrar la etiqueta <code>&lt;/body&gt;</code>:</p>
-        <div class="code-box">
-&lt;script src="http://127.0.0.1:5000/counter.js" data-site-key="wk_test_12345" async&gt;&lt;/script&gt;
-        </div>
-    </div>
-
-    <div id="c-modal" class="modal" onclick="if(event.target===this)this.style.display='none'">
-        <div class="modal-body">
-            <h3 style="margin-bottom: 8px;">Contacto y Documentación Oficial</h3>
-            <p style="color:var(--muted); margin-bottom: 8px;">Soporte técnico y claves de producción:</p>
-            <p><strong>Email:</strong> soporte@counter.local</p>
-            <p style="margin-top: 6px;"><strong>API Base:</strong> <code>http://127.0.0.1:5000/api/v1</code></p>
-            <button class="btn" style="margin-top: 16px; width: 100%; justify-content: center;" onclick="document.getElementById('c-modal').style.display='none'">Cerrar</button>
-        </div>
-    </div>
-</body>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

@@ -1,0 +1,91 @@
+.session-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.role-switcher-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.role-chip-admin {
+  background: #faf5ff;
+  color: #7e22ce;
+  border-color: #e9d5ff;
+}
+.role-chip-admin:hover {
+  background: #f3e8ff;
+  border-color: #d8b4fe;
+}
+
+.role-chip-user {
+  background: #f0f9ff;
+  color: #0284c7;
+  border-color: #bae6fd;
+}
+.role-chip-user:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+}
+
+.role-chip-divider {
+  width: 1px;
+  height: 12px;
+  background: currentColor;
+  opacity: 0.25;
+}
+
+.user-profile-badge {
+  font-size: 12px;
+  color: #475569;
+  background: #f8fafc;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-nav-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-nav-logout:hover {
+  background: #fee2e2;
+}
+
+.btn-nav-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #2563eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-nav-login:hover {
+  background: #1d4ed8;
+}

@@ -1,0 +1,39 @@
+.errors-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.errors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.error-item {
+  background: #f8fafc;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.error-msg {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b91c1c;
+  font-family: var(--font-mono);
+}
+
+.error-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.error-occurrences {
+  font-weight: 700;
+  color: #475569;
+}

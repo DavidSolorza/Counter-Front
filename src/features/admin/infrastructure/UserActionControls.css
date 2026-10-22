@@ -1,0 +1,54 @@
+.action-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.action-btn {
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-activate {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+.btn-activate:hover {
+  background: #dcfce7;
+}
+
+.btn-deactivate {
+  background: #fefce8;
+  color: #a16207;
+  border-color: #fde047;
+}
+.btn-deactivate:hover {
+  background: #fef9c3;
+}
+
+.btn-cancel {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+.btn-cancel:hover {
+  background: #fee2e2;
+}
+
+.btn-reactivate {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+.btn-reactivate:hover {
+  background: #dbeafe;
+}

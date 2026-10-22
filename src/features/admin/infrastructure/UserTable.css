@@ -1,0 +1,118 @@
+.user-table-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.users-table th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.users-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.user-row {
+  transition: background-color var(--transition-fast);
+}
+
+.user-row:hover {
+  background-color: #f8fafc;
+}
+
+.row-status-cancelled {
+  opacity: 0.75;
+  background-color: #fffbfb;
+}
+
+.user-profile-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  background: #e0e7ff;
+  color: #4338ca;
+  font-weight: 700;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-email {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.user-department {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.role-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pill-admin {
+  background: var(--role-admin-bg);
+  color: var(--role-admin-text);
+}
+
+.pill-user {
+  background: var(--role-user-bg);
+  color: var(--role-user-text);
+}
+
+.user-last-active {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.actions-cell {
+  text-align: right;
+}
+
+.empty-table-state {
+  text-align: center;
+  padding: 36px !important;
+  color: var(--text-muted);
+  font-style: italic;
+}

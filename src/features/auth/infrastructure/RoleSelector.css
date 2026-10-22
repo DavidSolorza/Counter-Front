@@ -1,0 +1,85 @@
+.role-selector-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.role-selector-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.role-selector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.role-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.role-btn.active-admin {
+  background: var(--role-admin-bg);
+  color: var(--role-admin-text);
+  border-color: #d8b4fe;
+}
+
+.role-btn.active-user {
+  background: var(--role-user-bg);
+  color: var(--role-user-text);
+  border-color: #bae6fd;
+}
+
+.auth-quick-access {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-light);
+}
+
+.quick-access-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.quick-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-quick {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.btn-quick:hover {
+  background: var(--bg-subtle);
+  border-color: #cbd5e1;
+}
