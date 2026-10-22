@@ -18,16 +18,8 @@
   gap: 12px;
 }
 
-.banner-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-}
-
-.banner-info span {
-  color: var(--text-muted);
-}
+.banner-info { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.banner-info span { color: var(--text-muted); }
 
 .active-role-tag {
   display: inline-flex;
@@ -38,31 +30,11 @@
   font-size: 12px;
 }
 
-.tag-admin {
-  background: var(--role-admin-bg);
-  color: var(--role-admin-text);
-  border: 1px solid #e9d5ff;
-}
+.tag-admin { background: var(--role-admin-bg); color: var(--role-admin-text); border: 1px solid #e9d5ff; }
+.tag-user { background: var(--role-user-bg); color: var(--role-user-text); border: 1px solid #bae6fd; }
 
-.tag-user {
-  background: var(--role-user-bg);
-  color: var(--role-user-text);
-  border: 1px solid #bae6fd;
-}
-
-.banner-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-}
-
-.banner-actions-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--text-muted);
-}
+.banner-actions { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.banner-actions-label { display: inline-flex; align-items: center; gap: 5px; color: var(--text-muted); }
 
 .btn-role-tab {
   display: inline-flex;
@@ -79,17 +51,8 @@
   cursor: pointer;
 }
 
-.btn-role-tab.active-admin {
-  background: var(--role-admin-bg);
-  color: var(--role-admin-text);
-  border-color: #d8b4fe;
-}
-
-.btn-role-tab.active-user {
-  background: var(--role-user-bg);
-  color: var(--role-user-text);
-  border-color: #bae6fd;
-}
+.btn-role-tab.active-admin { background: var(--role-admin-bg); color: var(--role-admin-text); border-color: #d8b4fe; }
+.btn-role-tab.active-user { background: var(--role-user-bg); color: var(--role-user-text); border-color: #bae6fd; }
 
 .dashboard-unauth-container {
   display: flex;
@@ -121,18 +84,8 @@
   margin: 0 auto 16px auto;
 }
 
-.unauth-card h2 {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-}
-
-.unauth-card p {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-bottom: 24px;
-}
+.unauth-card h2 { font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+.unauth-card p { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
 
 .btn-unauth-login {
   background: var(--brand-primary);
@@ -145,6 +98,4 @@
   cursor: pointer;
 }
 
-.btn-unauth-login:hover {
-  background: var(--brand-hover);
-}
+.btn-unauth-login:hover { background: var(--brand-hover); }

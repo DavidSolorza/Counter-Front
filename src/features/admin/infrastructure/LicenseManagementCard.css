@@ -24,20 +24,9 @@
   gap: 10px;
 }
 
-.license-icon {
-  color: #0284c7;
-}
-
-.license-header h3 {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.license-sub {
-  font-size: 11px;
-  color: var(--text-secondary);
-}
+.license-icon { color: #0284c7; }
+.license-header h3 { font-size: 15px; font-weight: 800; color: var(--text-primary); }
+.license-sub { font-size: 11px; color: var(--text-secondary); }
 
 .license-status-badge {
   display: inline-flex;
@@ -49,24 +38,9 @@
   font-weight: 700;
 }
 
-.status-live {
-  background: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
-}
-
-.status-killed {
-  background: #fef2f2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
-}
-
-.status-dot-pulse {
-  width: 6px;
-  height: 6px;
-  border-radius: var(--radius-full);
-  background: currentColor;
-}
+.status-live { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.status-killed { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.status-dot-pulse { width: 6px; height: 6px; border-radius: var(--radius-full); background: currentColor; }
 
 .license-details-grid {
   display: grid;
@@ -75,18 +49,8 @@
   align-items: center;
 }
 
-.license-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 12px;
-}
-
-.field-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 600;
-}
+.license-field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.field-label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
 
 .field-code {
   display: inline-flex;
@@ -126,23 +90,11 @@
   transition: all var(--transition-fast);
 }
 
-.btn-kill {
-  background: #fef2f2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
-}
-.btn-kill:hover {
-  background: #fee2e2;
-}
+.btn-kill { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.btn-kill:hover { background: #fee2e2; }
 
-.btn-restore {
-  background: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
-}
-.btn-restore:hover {
-  background: #dcfce7;
-}
+.btn-restore { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.btn-restore:hover { background: #dcfce7; }
 
 .killswitch-toast {
   margin-top: 14px;

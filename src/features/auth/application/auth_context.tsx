@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { UserRole, UserSession } from '../domain/user_session';
+import { GithubAuthService } from './github_auth_service';
 
 interface AuthContextValue {
   session: UserSession | null;
+  isAuthenticating: boolean;
   login: (email: string, role: UserRole) => void;
-  loginWithGithub: (role: UserRole, username?: string) => void;
+  loginWithGithub: (role: UserRole, username?: string) => Promise<void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
   isAuthModalOpen: boolean;
@@ -12,22 +14,25 @@ interface AuthContextValue {
   closeAuthModal: () => void;
 }
 
-const DEFAULT_ADMIN_SESSION: UserSession = {
-  id: 'usr_admin_01',
+const INITIAL_ADMIN_SESSION: UserSession = {
+  id: 'cntr_sess_initial',
   name: 'David Solorza',
-  email: 'david@counter.io',
+  email: 'davidsolorza@github.local',
   role: 'admin',
   isAuthenticated: true,
   provider: 'github',
   githubUsername: 'DavidSolorza',
   avatarUrl: 'https://github.com/DavidSolorza.png',
-  createdAt: '2026-01-15',
+  siteKey: 'wk_live_demo',
+  clientName: 'Streaming Store JP',
+  createdAt: '2026-10-22',
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [session, setSession] = useState<UserSession | null>(DEFAULT_ADMIN_SESSION);
+  const [session, setSession] = useState<UserSession | null>(INITIAL_ADMIN_SESSION);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const login = (email: string, role: UserRole) => {
@@ -43,37 +48,45 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsAuthModalOpen(false);
   };
 
-  const loginWithGithub = (role: UserRole, username: string = 'DavidSolorza') => {
-    setSession({
-      id: `gh_${Date.now()}`,
-      name: username === 'DavidSolorza' ? 'David Solorza' : username,
-      email: `${username.toLowerCase()}@github.com`,
-      role,
-      isAuthenticated: true,
-      provider: 'github',
-      githubUsername: username,
-      avatarUrl: `https://github.com/${username}.png`,
-      createdAt: new Date().toISOString().split('T')[0],
-    });
-    setIsAuthModalOpen(false);
+  const loginWithGithub = async (role: UserRole, username: string = 'DavidSolorza') => {
+    setIsAuthenticating(true);
+    try {
+      const authData = await GithubAuthService.authenticate(role, username);
+      setSession({
+        id: authData.token,
+        name: authData.user.username === 'DavidSolorza' ? 'David Solorza' : authData.user.username,
+        email: authData.user.email,
+        role: authData.user.role,
+        isAuthenticated: true,
+        provider: 'github',
+        githubUsername: authData.user.username,
+        avatarUrl: authData.user.avatar_url,
+        token: authData.token,
+        siteKey: authData.license.site_key,
+        clientName: authData.license.client_name,
+        createdAt: new Date().toISOString().split('T')[0],
+      });
+      setIsAuthModalOpen(false);
+    } finally {
+      setIsAuthenticating(false);
+    }
   };
 
   const logout = () => {
+    GithubAuthService.clearSession();
     setSession(null);
   };
 
   const switchRole = (newRole: UserRole) => {
     if (!session) return;
-    setSession({
-      ...session,
-      role: newRole,
-    });
+    setSession({ ...session, role: newRole });
   };
 
   return (
     <AuthContext.Provider
       value={{
         session,
+        isAuthenticating,
         login,
         loginWithGithub,
         logout,

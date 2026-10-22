@@ -10,6 +10,9 @@ export interface UserSession {
   readonly provider: AuthProviderType;
   readonly githubUsername?: string;
   readonly avatarUrl?: string;
+  readonly token?: string;
+  readonly siteKey?: string;
+  readonly clientName?: string;
   readonly createdAt: string;
 }
 

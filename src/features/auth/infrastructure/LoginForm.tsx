@@ -7,7 +7,7 @@ import { GithubLoginButton } from './GithubLoginButton';
 import './LoginForm.css';
 
 export const LoginForm: React.FC = () => {
-  const { login, loginWithGithub, isAuthModalOpen, closeAuthModal } = useAuth();
+  const { login, loginWithGithub, isAuthenticating, isAuthModalOpen, closeAuthModal } = useAuth();
   const [email, setEmail] = useState('admin@counter.io');
   const [role, setRole] = useState<UserRole>('admin');
 
@@ -44,6 +44,7 @@ export const LoginForm: React.FC = () => {
         <GithubLoginButton
           currentRole={role}
           onGithubLogin={handleGithubLogin}
+          isLoading={isAuthenticating}
         />
 
         <div className="auth-divider">

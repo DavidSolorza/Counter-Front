@@ -20,12 +20,31 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.btn-github-oauth:hover {
+.btn-github-oauth:hover:not(:disabled) {
   background: #1a1e22;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }
 
+.btn-github-oauth:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .github-icon {
   flex-shrink: 0;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
