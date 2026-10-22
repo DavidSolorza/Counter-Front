@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { UserRole, UserSession } from '../domain/user_session';
 import { GithubAuthService } from './github_auth_service';
+import { GoogleAuthService } from './google_auth_service';
 
 interface AuthContextValue {
   session: UserSession | null;
@@ -8,6 +9,8 @@ interface AuthContextValue {
   login: (email: string, role: UserRole) => void;
   loginWithGithub: (role: UserRole, username?: string, code?: string) => Promise<void>;
   loginWithOAuthRedirect: (role: UserRole) => void;
+  loginWithGoogle: (role: UserRole, email?: string, name?: string, code?: string) => Promise<void>;
+  loginWithGoogleOAuthRedirect: (role: UserRole) => void;
   logout: () => void;
   switchRole: (role: UserRole) => void;
   isAuthModalOpen: boolean;
@@ -18,9 +21,7 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [session, setSession] = useState<UserSession | null>(() =>
-    GithubAuthService.getSavedSession()
-  );
+  const [session, setSession] = useState<UserSession | null>(() => GithubAuthService.getSavedSession());
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
@@ -42,20 +43,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const loginWithGithub = async (role: UserRole, username?: string, code?: string) => {
     setIsAuthenticating(true);
     try {
-      const authData = await GithubAuthService.authenticate(role, username, code);
+      const auth = await GithubAuthService.authenticate(role, username, code);
       const newSession: UserSession = {
-        id: authData.token,
-        name: authData.user.username,
-        email: authData.user.email,
-        role: authData.user.role,
+        id: auth.token,
+        name: auth.user.username,
+        email: auth.user.email,
+        role: auth.user.role,
         isAuthenticated: true,
         provider: 'github',
-        githubUsername: authData.user.username,
-        avatarUrl: authData.user.avatar_url,
-        token: authData.token,
-        license: authData.license,
-        siteKey: authData.license.site_key,
-        clientName: authData.license.client_name,
+        githubUsername: auth.user.username,
+        avatarUrl: auth.user.avatar_url,
+        token: auth.token,
+        license: auth.license,
+        siteKey: auth.license.site_key,
+        clientName: auth.license.client_name,
         createdAt: new Date().toISOString().split('T')[0],
       };
       GithubAuthService.persistSession(newSession);
@@ -66,17 +67,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const loginWithOAuthRedirect = (role: UserRole) => {
-    GithubAuthService.redirectToGithubOAuth(role);
+  const loginWithGoogle = async (role: UserRole, email?: string, name?: string, code?: string) => {
+    setIsAuthenticating(true);
+    try {
+      const newSession = await GoogleAuthService.authenticate(role, email, name, code);
+      setSession(newSession);
+      setIsAuthModalOpen(false);
+    } finally {
+      setIsAuthenticating(false);
+    }
   };
+
+  const loginWithOAuthRedirect = (role: UserRole) => GithubAuthService.redirectToGithubOAuth(role);
+  const loginWithGoogleOAuthRedirect = (role: UserRole) => GoogleAuthService.redirectToGoogleOAuth(role);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
-    const state = params.get('state') as UserRole;
+    const rawState = params.get('state') || '';
     if (code) {
       window.history.replaceState({}, document.title, window.location.pathname);
-      loginWithGithub(state === 'user' ? 'user' : 'admin', undefined, code);
+      if (rawState.startsWith('google_')) {
+        const role = (rawState.replace('google_', '') as UserRole) || 'admin';
+        loginWithGoogle(role, 'davidsolorza@gmail.com', 'David Solorza', code);
+      } else {
+        const stateRole = rawState as UserRole;
+        loginWithGithub(stateRole === 'user' ? 'user' : 'admin', undefined, code);
+      }
     }
   }, []);
 
@@ -100,6 +117,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         login,
         loginWithGithub,
         loginWithOAuthRedirect,
+        loginWithGoogle,
+        loginWithGoogleOAuthRedirect,
         logout,
         switchRole,
         isAuthModalOpen,
@@ -120,11 +139,5 @@ export const useAuth = (): AuthContextValue => {
 
 export const useActiveSiteKey = (): string => {
   const { session } = useAuth();
-  return (
-    session?.license?.site_key ||
-    session?.siteKey ||
-    localStorage.getItem('__cntr_site_key') ||
-    import.meta.env.VITE_DEFAULT_SITE_KEY ||
-    'wk_live_demo'
-  );
+  return session?.license?.site_key || session?.siteKey || localStorage.getItem('__cntr_site_key') || 'wk_live_demo';
 };

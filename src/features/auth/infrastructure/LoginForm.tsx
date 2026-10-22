@@ -4,6 +4,7 @@ import { useAuth } from '../application/auth_context';
 import { UserRole } from '../domain/user_session';
 import { RoleSelector } from './RoleSelector';
 import { GithubLoginButton } from './GithubLoginButton';
+import { GoogleLoginButton } from './GoogleLoginButton';
 import './LoginForm.css';
 
 export const LoginForm: React.FC = () => {
@@ -11,6 +12,7 @@ export const LoginForm: React.FC = () => {
     login,
     loginWithGithub,
     loginWithOAuthRedirect,
+    loginWithGoogleOAuthRedirect,
     isAuthenticating,
     isAuthModalOpen,
     closeAuthModal,
@@ -36,6 +38,10 @@ export const LoginForm: React.FC = () => {
     loginWithOAuthRedirect(selectedRole);
   };
 
+  const handleRealGoogleOAuth = (selectedRole: UserRole) => {
+    loginWithGoogleOAuthRedirect(selectedRole);
+  };
+
   const handleDirectDemoLogin = () => {
     loginWithGithub(role, 'DavidSolorza');
   };
@@ -49,7 +55,7 @@ export const LoginForm: React.FC = () => {
             <span>Acceso Seguro Enterprise</span>
           </div>
           <h2>Autenticación en Counter</h2>
-          <p>Conéctate con tu cuenta real de GitHub o ingresa con credenciales.</p>
+          <p>Conéctate con tu cuenta de GitHub, Google o credenciales corporativas.</p>
         </div>
 
         <GithubLoginButton
@@ -58,12 +64,18 @@ export const LoginForm: React.FC = () => {
           isLoading={isAuthenticating}
         />
 
+        <GoogleLoginButton
+          currentRole={role}
+          onGoogleLogin={handleRealGoogleOAuth}
+          isLoading={isAuthenticating}
+        />
+
         <div className="oauth-redirect-link-wrap">
           <button
             type="button"
             className="btn-link-oauth"
             onClick={handleDirectDemoLogin}
-            title="Iniciar sesión directa de prueba local sin salir a GitHub"
+            title="Iniciar sesión directa de prueba local sin salir a proveedores externos"
           >
             <span>O probar sesión local demo (@DavidSolorza)</span>
           </button>

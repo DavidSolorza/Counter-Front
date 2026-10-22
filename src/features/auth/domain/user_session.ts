@@ -1,5 +1,5 @@
 export type UserRole = 'admin' | 'user';
-export type AuthProviderType = 'local' | 'github';
+export type AuthProviderType = 'local' | 'github' | 'google';
 
 export interface UserLicense {
   readonly site_key: string;
@@ -35,5 +35,9 @@ export class SessionHelper {
 
   public static isGithubUser(session: UserSession | null): boolean {
     return session !== null && session.isAuthenticated && session.provider === 'github';
+  }
+
+  public static isGoogleUser(session: UserSession | null): boolean {
+    return session !== null && session.isAuthenticated && session.provider === 'google';
   }
 }
