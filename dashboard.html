@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter - Enterprise Intelligence Platform</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="topbar">
+        <div class="brand">⚡ Counter Intelligence Platform</div>
+        <div style="display: flex; gap: 8px;">
+            <a href="index.html" class="btn">🏠 Volver a Inicio</a>
+            <button class="btn btn-primary" onclick="document.getElementById('c-modal').style.display='flex'">✉️ Soporte & API</button>
+        </div>
+    </div>
+
+    <div class="grid4">
+        <div class="card"><h4>Eventos Totales</h4><div class="num" id="s-tot">...</div></div>
+        <div class="card"><h4>Clics Registrados</h4><div class="num" id="s-cli" style="color:#2563eb;">...</div></div>
+        <div class="card"><h4>Rage Clicks (Fricción)</h4><div class="num" id="s-rag" style="color:#ea580c;">...</div></div>
+        <div class="card"><h4>Errores de Script</h4><div class="num" id="s-err" style="color:#dc2626;">...</div></div>
+    </div>
+
+    <div class="grid2">
+        <div class="card">
+            <h4>Top Elementos Más Clickeados</h4>
+            <div id="top-el-list" style="margin-top: 8px;">Cargando...</div>
+        </div>
+        <div class="card">
+            <h4>Profundidad de Lectura (Scroll)</h4>
+            <div id="scroll-bars" style="margin-top: 8px;">Cargando...</div>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Hora</th>
+                <th>Tipo</th>
+                <th>Componente Recreado</th>
+                <th>Página URL</th>
+                <th>Navegador / SO</th>
+                <th>IP Origen</th>
+            </tr>
+        </thead>
+        <tbody id="tbl-events">
+            <tr><td colspan="6" style="text-align: center; color: var(--muted);">Cargando telemetría desde el Backend...</td></tr>
+        </tbody>
+    </table>
+
+    <div id="c-modal" class="modal" onclick="if(event.target===this)this.style.display='none'">
+        <div class="modal-body">
+            <h3 style="margin-bottom: 8px;">Conexión de API & Soporte</h3>
+            <p style="color:var(--muted); margin-bottom: 12px;">El Frontend se comunica exclusivamente vía HTTP REST:</p>
+            <div style="margin-bottom: 8px;"><strong>API Endpoint Actual:</strong></div>
+            <input type="text" id="api-input" value="http://127.0.0.1:5000/api/v1" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-family: monospace; font-size: 11px; margin-bottom: 12px;">
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-primary" style="flex: 1;" onclick="CounterAPI.setBaseUrl(document.getElementById('api-input').value); alert('Endpoint actualizado');">Guardar Endpoint</button>
+                <button class="btn" onclick="document.getElementById('c-modal').style.display='none'">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/api_client.js"></script>
+    <script src="scripts/visual_wireframe.js"></script>
+    <script src="scripts/dashboard.js"></script>
+</body>
+</html>

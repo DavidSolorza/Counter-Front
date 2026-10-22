@@ -1,0 +1,40 @@
+# ==========================================
+# Counter Frontend - Git Ignore Rules
+# ==========================================
+
+# Dependencias Node & Builds Cliente
+node_modules/
+dist/
+build/
+.npm/
+.cache/
+
+# Variables de entorno locales
+.env
+.env.local
+.env.production
+
+# Archivos de Sistema & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+
+# ==========================================
+# Exclusión Estricta de Código de Backend
+# (El backend vive desacoplado en DavidSolorza/Counter)
+# ==========================================
+*.py
+*.pyc
+*.pyo
+__pycache__/
+*.db
+*.sqlite
+*.sqlite3
+venv/
+env/
+.venv/
+backend/
+database/
+sdk/
