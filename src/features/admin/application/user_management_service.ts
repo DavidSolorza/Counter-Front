@@ -9,6 +9,7 @@ const INITIAL_MOCK_USERS: ManagedUser[] = [
     status: 'active',
     department: 'DevOps & Observabilidad',
     lastActive: 'Hace 5 min',
+    siteKey: 'wk_valeria_devops',
   },
   {
     id: 'usr_002',
@@ -18,6 +19,7 @@ const INITIAL_MOCK_USERS: ManagedUser[] = [
     status: 'active',
     department: 'Producto & UX',
     lastActive: 'Hace 23 min',
+    siteKey: 'wk_carlos_mendoza',
   },
   {
     id: 'usr_003',
@@ -27,6 +29,7 @@ const INITIAL_MOCK_USERS: ManagedUser[] = [
     status: 'inactive',
     department: 'Seguridad de la Información',
     lastActive: 'Ayer',
+    siteKey: 'wk_sofia_security',
   },
   {
     id: 'usr_004',
@@ -36,6 +39,7 @@ const INITIAL_MOCK_USERS: ManagedUser[] = [
     status: 'active',
     department: 'Ingeniería Frontend',
     lastActive: 'Hace 1 hora',
+    siteKey: 'wk_mateo_frontend',
   },
   {
     id: 'usr_005',
@@ -45,6 +49,7 @@ const INITIAL_MOCK_USERS: ManagedUser[] = [
     status: 'cancelled',
     department: 'Auditoría Externa',
     lastActive: 'Hace 2 semanas',
+    siteKey: 'wk_elena_audit',
   },
   {
     id: 'usr_006',
@@ -54,6 +59,7 @@ const INITIAL_MOCK_USERS: ManagedUser[] = [
     status: 'inactive',
     department: 'Inteligencia de Datos',
     lastActive: 'Hace 3 días',
+    siteKey: 'wk_andres_data',
   },
 ];
 

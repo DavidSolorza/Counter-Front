@@ -5,11 +5,13 @@ import { ManagedUser } from '../domain/managed_user';
 import { AdminSummaryCards } from './AdminSummaryCards';
 import { UserTable } from './UserTable';
 import { LicenseManagementCard } from './LicenseManagementCard';
+import { UserAnalyticsDashboard } from '../../analytics/infrastructure/UserAnalyticsDashboard';
 import './AdminPanel.css';
 
 export const AdminPanel: React.FC = () => {
   const [users, setUsers] = useState<ManagedUser[]>(() => userManagementService.getAll());
   const [notification, setNotification] = useState<string | null>(null);
+  const [monitoredUser, setMonitoredUser] = useState<ManagedUser | null>(null);
 
   const showToast = (message: string) => {
     setNotification(message);
@@ -34,6 +36,16 @@ export const AdminPanel: React.FC = () => {
     showToast('Usuario reactivado satisfactoriamente.');
   };
 
+  if (monitoredUser) {
+    return (
+      <UserAnalyticsDashboard
+        customSiteKey={monitoredUser.siteKey || 'wk_live_demo'}
+        monitoredUserTitle={monitoredUser.fullName}
+        onExitMonitoring={() => setMonitoredUser(null)}
+      />
+    );
+  }
+
   return (
     <div className="admin-panel-container">
       <div className="admin-header">
@@ -44,7 +56,7 @@ export const AdminPanel: React.FC = () => {
           </div>
           <h1 className="admin-title">Gestión de Usuarios y Accesos</h1>
           <p className="admin-subtitle">
-            Administra los roles, pausa usuarios temporalmente o cancela cuentas de la organización.
+            Administra los roles, pausa usuarios temporalmente o entra al dashboard de cualquier cliente a monitorear.
           </p>
         </div>
         {notification && (
@@ -64,6 +76,7 @@ export const AdminPanel: React.FC = () => {
         onToggleActive={handleToggleActive}
         onCancelUser={handleCancelUser}
         onReactivateUser={handleReactivateUser}
+        onMonitorUser={(user) => setMonitoredUser(user)}
       />
     </div>
   );

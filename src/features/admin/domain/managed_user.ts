@@ -8,6 +8,7 @@ export interface ManagedUser {
   readonly status: UserAccountStatus;
   readonly department: string;
   readonly lastActive: string;
+  readonly siteKey?: string;
 }
 
 export class ManagedUserRules {

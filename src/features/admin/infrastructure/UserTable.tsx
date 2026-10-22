@@ -10,6 +10,7 @@ interface UserTableProps {
   onToggleActive: (id: string) => void;
   onCancelUser: (id: string) => void;
   onReactivateUser: (id: string) => void;
+  onMonitorUser?: (user: ManagedUser) => void;
 }
 
 export const UserTable: React.FC<UserTableProps> = ({
@@ -17,6 +18,7 @@ export const UserTable: React.FC<UserTableProps> = ({
   onToggleActive,
   onCancelUser,
   onReactivateUser,
+  onMonitorUser,
 }) => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -96,6 +98,7 @@ export const UserTable: React.FC<UserTableProps> = ({
                   onToggleActive={onToggleActive}
                   onCancelUser={onCancelUser}
                   onReactivateUser={onReactivateUser}
+                  onMonitorUser={onMonitorUser}
                 />
               ))
             ) : (

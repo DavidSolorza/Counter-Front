@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, Key, ShieldCheck } from 'lucide-react';
+import { RefreshCw, Key, ShieldCheck, Eye, ArrowLeft } from 'lucide-react';
 import { useActiveSiteKey } from '../../auth/application/auth_context';
 import { analyticsService } from '../application/analytics_service';
 import { AnalyticsOverviewData, RawTelemetryEvent } from '../domain/analytics_types';
@@ -10,8 +10,19 @@ import { VisualComponentsSection } from './VisualComponentsSection';
 import { TelemetryEventsTable } from './TelemetryEventsTable';
 import './UserAnalyticsDashboard.css';
 
-export const UserAnalyticsDashboard: React.FC = () => {
-  const siteKey = useActiveSiteKey();
+interface UserAnalyticsDashboardProps {
+  customSiteKey?: string;
+  monitoredUserTitle?: string;
+  onExitMonitoring?: () => void;
+}
+
+export const UserAnalyticsDashboard: React.FC<UserAnalyticsDashboardProps> = ({
+  customSiteKey,
+  monitoredUserTitle,
+  onExitMonitoring,
+}) => {
+  const defaultSiteKey = useActiveSiteKey();
+  const siteKey = customSiteKey || defaultSiteKey;
   const [data, setData] = useState<AnalyticsOverviewData | null>(null);
   const [events, setEvents] = useState<RawTelemetryEvent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +51,21 @@ export const UserAnalyticsDashboard: React.FC = () => {
 
   return (
     <div className="user-dashboard-container">
+      {monitoredUserTitle && onExitMonitoring && (
+        <div className="admin-monitoring-alert">
+          <div className="alert-content">
+            <Eye size={15} />
+            <span>
+              Modo Auditoría Admin: Monitoreando telemetría de <strong>{monitoredUserTitle}</strong> (Licencia: <code>{siteKey}</code>)
+            </span>
+          </div>
+          <button type="button" className="btn-exit-monitoring" onClick={onExitMonitoring}>
+            <ArrowLeft size={13} />
+            <span>Volver a Gestión de Usuarios</span>
+          </button>
+        </div>
+      )}
+
       <div className="dashboard-top-bar">
         <div className="dashboard-meta-info">
           <div className="site-key-badge">

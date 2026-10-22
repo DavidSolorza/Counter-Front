@@ -9,6 +9,7 @@ interface UserTableRowProps {
   onToggleActive: (id: string) => void;
   onCancelUser: (id: string) => void;
   onReactivateUser: (id: string) => void;
+  onMonitorUser?: (user: ManagedUser) => void;
 }
 
 export const UserTableRow: React.FC<UserTableRowProps> = ({
@@ -16,6 +17,7 @@ export const UserTableRow: React.FC<UserTableRowProps> = ({
   onToggleActive,
   onCancelUser,
   onReactivateUser,
+  onMonitorUser,
 }) => {
   const initials = user.fullName
     .split(' ')
@@ -64,6 +66,7 @@ export const UserTableRow: React.FC<UserTableRowProps> = ({
           onToggleActive={onToggleActive}
           onCancelUser={onCancelUser}
           onReactivateUser={onReactivateUser}
+          onMonitorUser={onMonitorUser}
         />
       </td>
     </tr>

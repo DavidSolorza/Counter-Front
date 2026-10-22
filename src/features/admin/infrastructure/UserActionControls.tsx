@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pause, Play, Ban, RotateCcw } from 'lucide-react';
+import { Pause, Play, Ban, RotateCcw, Activity } from 'lucide-react';
 import { ManagedUser, ManagedUserRules } from '../domain/managed_user';
 import './UserActionControls.css';
 
@@ -8,6 +8,7 @@ interface UserActionControlsProps {
   onToggleActive: (id: string) => void;
   onCancelUser: (id: string) => void;
   onReactivateUser: (id: string) => void;
+  onMonitorUser?: (user: ManagedUser) => void;
 }
 
 export const UserActionControls: React.FC<UserActionControlsProps> = ({
@@ -15,9 +16,22 @@ export const UserActionControls: React.FC<UserActionControlsProps> = ({
   onToggleActive,
   onCancelUser,
   onReactivateUser,
+  onMonitorUser,
 }) => {
   return (
     <div className="action-controls-group">
+      {onMonitorUser && (
+        <button
+          type="button"
+          className="action-btn btn-monitor"
+          onClick={() => onMonitorUser(user)}
+          title={`Monitorear telemetría y dashboard de ${user.fullName}`}
+        >
+          <Activity size={12} />
+          <span>Monitorear</span>
+        </button>
+      )}
+
       {user.status !== 'cancelled' ? (
         <>
           <button

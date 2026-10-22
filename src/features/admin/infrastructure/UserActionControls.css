@@ -17,6 +17,15 @@
   gap: 4px;
 }
 
+.btn-monitor {
+  background: #f0fdfa;
+  color: #0d9488;
+  border-color: #99f6e4;
+}
+.btn-monitor:hover {
+  background: #ccfbf1;
+}
+
 .btn-activate {
   background: #f0fdf4;
   color: #15803d;
