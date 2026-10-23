@@ -93,7 +93,7 @@ export const AdminPanel: React.FC = () => {
 
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'rgba(255,255,255,0.6)', fontSize: '0.78rem' }}>
         <Database size={13} style={{ color: '#00d2ff' }} />
-        <span>Conexión viva con Spring Boot (security.db en :8080) &middot; {users.length} licencias cargadas</span>
+        <span>Microservicio de Seguridad Sincronizado (security.db) &middot; {users.length} licencias cargadas</span>
       </div>
 
       <LicenseManagementCard />

@@ -1,4 +1,5 @@
 import { httpClient } from '../../../core/http/http_client';
+import { APP_CONFIG } from '../../../core/config/app_config';
 import {
   AnalyticsOverviewData,
   AnalyticsOverviewResponse,
@@ -6,20 +7,18 @@ import {
   RawTelemetryEvent,
 } from '../domain/analytics_types';
 
-const BASE_URL = 'http://localhost:5000/api/v1';
-
 export class AnalyticsService {
   public async getOverview(siteKey: string = 'wk_live_demo'): Promise<AnalyticsOverviewData> {
     try {
       const response = await httpClient.get<AnalyticsOverviewResponse>(
-        `${BASE_URL}/analytics/overview/${siteKey}`
+        `${APP_CONFIG.apiBaseUrl}/analytics/overview/${siteKey}`
       );
       if (response && response.success && response.data) {
         return response.data;
       }
       throw new Error('Respuesta inválida del servidor');
     } catch (error) {
-      console.warn('Fallo al conectar con Flask backend, activando fallback local:', error);
+      console.warn('Fallo al conectar con colector de analítica, activando fallback local:', error);
       return this.getFallbackOverview(siteKey);
     }
   }
@@ -27,7 +26,7 @@ export class AnalyticsService {
   public async getEvents(siteKey: string = 'wk_live_demo', limit: number = 15): Promise<RawTelemetryEvent[]> {
     try {
       const response = await httpClient.get<RawEventsResponse>(
-        `${BASE_URL}/events/${siteKey}?limit=${limit}`
+        `${APP_CONFIG.apiBaseUrl}/events/${siteKey}?limit=${limit}`
       );
       if (response && Array.isArray(response.events)) {
         return response.events;

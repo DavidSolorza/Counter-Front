@@ -74,7 +74,7 @@ export const UserAnalyticsDashboard: React.FC<UserAnalyticsDashboardProps> = ({
           </div>
           <div className="backend-status-pill">
             <ShieldCheck size={13} />
-            <span>Backend Flask :5000 Conectado</span>
+            <span>Colector de Telemetría Activo</span>
           </div>
           {lastUpdated && <span className="last-sync-text">Sincronizado: {lastUpdated}</span>}
         </div>

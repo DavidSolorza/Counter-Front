@@ -24,7 +24,7 @@ export const LicenseManagementCard: React.FC = () => {
         <div className="license-title-row">
           <Shield size={16} className="license-icon" />
           <div>
-            <h3>Control de Licencia & Dominio (Microservicio Seguridad :8080)</h3>
+            <h3>Control de Licencia & Dominio (Microservicio de Seguridad)</h3>
             <span className="license-sub">Gestión remota de Kill-Switch e integridad de clientes (security.db)</span>
           </div>
         </div>
