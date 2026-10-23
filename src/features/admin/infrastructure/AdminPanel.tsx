@@ -5,6 +5,7 @@ import { ManagedUser } from '../domain/managed_user';
 import { AdminSummaryCards } from './AdminSummaryCards';
 import { UserTable } from './UserTable';
 import { LicenseManagementCard } from './LicenseManagementCard';
+import { AdminAccessControlCard } from './AdminAccessControlCard';
 import { UserAnalyticsDashboard } from '../../analytics/infrastructure/UserAnalyticsDashboard';
 import './AdminPanel.css';
 
@@ -46,6 +47,12 @@ export const AdminPanel: React.FC = () => {
     const updated = await userManagementService.reactivateUser(id);
     setUsers(updated);
     showToast('Licencia reactivada satisfactoriamente.');
+  };
+
+  const handleChangeRole = async (id: string, newRole: 'admin' | 'user') => {
+    const updated = await userManagementService.changeRole(id, newRole);
+    setUsers(updated);
+    showToast(`Rol actualizado a: ${newRole === 'admin' ? 'Administrador' : 'Usuario Regular'}`);
   };
 
   if (monitoredUser) {
@@ -96,6 +103,7 @@ export const AdminPanel: React.FC = () => {
         <span>Microservicio de Seguridad Sincronizado (security.db) &middot; {users.length} licencias cargadas</span>
       </div>
 
+      <AdminAccessControlCard onToggleMessage={showToast} />
       <LicenseManagementCard />
       <AdminSummaryCards users={users} />
       <UserTable
@@ -104,6 +112,7 @@ export const AdminPanel: React.FC = () => {
         onCancelUser={handleCancelUser}
         onReactivateUser={handleReactivateUser}
         onMonitorUser={(user) => setMonitoredUser(user)}
+        onChangeRole={handleChangeRole}
       />
     </div>
   );

@@ -1,5 +1,6 @@
-import React from 'react';
-import { ShieldCheck, UserCheck, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ShieldCheck, UserCheck, Check, Lock } from 'lucide-react';
+import { accessGovernanceService } from '../../auth/application/access_governance_service';
 import './LandingRolePreview.css';
 
 interface LandingRolePreviewProps {
@@ -7,6 +8,14 @@ interface LandingRolePreviewProps {
 }
 
 export const LandingRolePreview: React.FC<LandingRolePreviewProps> = ({ onSelectRole }) => {
+  const [allowAdmin, setAllowAdmin] = useState<boolean>(() =>
+    accessGovernanceService.isPublicAdminLoginAllowed()
+  );
+
+  useEffect(() => {
+    return accessGovernanceService.subscribe(setAllowAdmin);
+  }, []);
+
   return (
     <section className="role-preview-section">
       <div className="section-title-wrap">
@@ -24,7 +33,7 @@ export const LandingRolePreview: React.FC<LandingRolePreviewProps> = ({ onSelect
               <ShieldCheck size={13} />
               <span>Rol Administrador</span>
             </span>
-            <span className="role-card-status">Control Total</span>
+            <span className="role-card-status">{allowAdmin ? 'Control Total' : 'Acceso Restringido'}</span>
           </div>
           <h3>Gestión de Usuarios y Accesos</h3>
           <p>Supervisa las cuentas de la organización con permisos elevados:</p>
@@ -46,14 +55,25 @@ export const LandingRolePreview: React.FC<LandingRolePreviewProps> = ({ onSelect
               <span><strong>Auditoría & Búsqueda:</strong> Filtrado por departamento y actividad.</span>
             </li>
           </ul>
-          <button
-            type="button"
-            className="btn-role-action btn-admin-action"
-            onClick={() => onSelectRole('admin')}
-          >
-            <ShieldCheck size={14} />
-            <span>Probar como Administrador</span>
-          </button>
+          {allowAdmin ? (
+            <button
+              type="button"
+              className="btn-role-action btn-admin-action"
+              onClick={() => onSelectRole('admin')}
+            >
+              <ShieldCheck size={14} />
+              <span>Probar como Administrador</span>
+            </button>
+          ) : (
+            <div
+              className="btn-role-action btn-admin-action"
+              style={{ opacity: 0.7, cursor: 'not-allowed', background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)' }}
+              title="El inicio de sesión como Administrador está deshabilitado por el administrador del sistema."
+            >
+              <Lock size={14} />
+              <span>Acceso Admin Protegido</span>
+            </div>
+          )}
         </div>
 
         <div className="role-card role-card-user">
@@ -62,7 +82,7 @@ export const LandingRolePreview: React.FC<LandingRolePreviewProps> = ({ onSelect
               <UserCheck size={13} />
               <span>Rol Usuario / Analista</span>
             </span>
-            <span className="role-card-status">Solo Lectura</span>
+            <span className="role-card-status">Acceso Abierto</span>
           </div>
           <h3>Observabilidad y Telemetría</h3>
           <p>Accede a métricas de comportamiento y eventos en tiempo real:</p>

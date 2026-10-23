@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pause, Play, Ban, RotateCcw, Activity } from 'lucide-react';
+import { Pause, Play, Ban, RotateCcw, Activity, ShieldCheck, User } from 'lucide-react';
 import { ManagedUser, ManagedUserRules } from '../domain/managed_user';
 import './UserActionControls.css';
 
@@ -9,6 +9,8 @@ interface UserActionControlsProps {
   onCancelUser: (id: string) => void;
   onReactivateUser: (id: string) => void;
   onMonitorUser?: (user: ManagedUser) => void;
+  onChangeRole?: (id: string, newRole: 'admin' | 'user') => void;
+  totalAdminsCount?: number;
 }
 
 export const UserActionControls: React.FC<UserActionControlsProps> = ({
@@ -17,7 +19,17 @@ export const UserActionControls: React.FC<UserActionControlsProps> = ({
   onCancelUser,
   onReactivateUser,
   onMonitorUser,
+  onChangeRole,
+  totalAdminsCount = 1,
 }) => {
+  const isOnlyAdmin = user.role === 'admin' && totalAdminsCount <= 1;
+
+  const handleRoleToggle = () => {
+    if (!onChangeRole || isOnlyAdmin) return;
+    const nextRole = user.role === 'admin' ? 'user' : 'admin';
+    onChangeRole(user.id, nextRole);
+  };
+
   return (
     <div className="action-controls-group">
       {onMonitorUser && (
@@ -32,6 +44,25 @@ export const UserActionControls: React.FC<UserActionControlsProps> = ({
         </button>
       )}
 
+      {onChangeRole && (
+        <button
+          type="button"
+          className={`action-btn ${user.role === 'user' ? 'btn-promote' : 'btn-demote'} ${isOnlyAdmin ? 'btn-disabled' : ''}`}
+          onClick={handleRoleToggle}
+          disabled={isOnlyAdmin}
+          title={
+            isOnlyAdmin
+              ? 'No puedes degradar al único Administrador de la plataforma'
+              : user.role === 'user'
+              ? 'Conceder privilegios de Administrador'
+              : 'Revocar privilegios de Administrador'
+          }
+        >
+          {user.role === 'user' ? <ShieldCheck size={12} /> : <User size={12} />}
+          <span>{user.role === 'user' ? 'Hacer Admin' : 'Hacer Usuario'}</span>
+        </button>
+      )}
+
       {user.status !== 'cancelled' ? (
         <>
           <button
@@ -40,17 +71,8 @@ export const UserActionControls: React.FC<UserActionControlsProps> = ({
             onClick={() => onToggleActive(user.id)}
             title={user.status === 'active' ? 'Pausar cuenta' : 'Activar cuenta'}
           >
-            {user.status === 'active' ? (
-              <>
-                <Pause size={12} />
-                <span>Pausar</span>
-              </>
-            ) : (
-              <>
-                <Play size={12} />
-                <span>Activar</span>
-              </>
-            )}
+            {user.status === 'active' ? <Pause size={12} /> : <Play size={12} />}
+            <span>{user.status === 'active' ? 'Pausar' : 'Activar'}</span>
           </button>
 
           {ManagedUserRules.canBeCancelled(user.status) && (

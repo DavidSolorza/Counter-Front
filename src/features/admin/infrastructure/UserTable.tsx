@@ -11,6 +11,7 @@ interface UserTableProps {
   onCancelUser: (id: string) => void;
   onReactivateUser: (id: string) => void;
   onMonitorUser?: (user: ManagedUser) => void;
+  onChangeRole?: (id: string, newRole: 'admin' | 'user') => void;
 }
 
 export const UserTable: React.FC<UserTableProps> = ({
@@ -19,9 +20,12 @@ export const UserTable: React.FC<UserTableProps> = ({
   onCancelUser,
   onReactivateUser,
   onMonitorUser,
+  onChangeRole,
 }) => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+
+  const totalAdminsCount = users.filter((u) => u.role === 'admin').length;
 
   const filteredUsers = users.filter((u) => {
     const matchesStatus = filterStatus === 'all' || u.status === filterStatus;
@@ -99,6 +103,8 @@ export const UserTable: React.FC<UserTableProps> = ({
                   onCancelUser={onCancelUser}
                   onReactivateUser={onReactivateUser}
                   onMonitorUser={onMonitorUser}
+                  onChangeRole={onChangeRole}
+                  totalAdminsCount={totalAdminsCount}
                 />
               ))
             ) : (

@@ -84,6 +84,20 @@ export class UserManagementService {
     this.users = this.users.map((u) => (u.id === id ? { ...u, status: 'active' } : u));
     return [...this.users];
   }
+
+  public async changeRole(id: string, newRole: 'admin' | 'user'): Promise<ManagedUser[]> {
+    const user = this.users.find((u) => u.id === id);
+    if (!user) return [...this.users];
+    if (user.siteKey) {
+      try {
+        await httpClient.post(`${APP_CONFIG.adminUsersUrl}/${user.siteKey}/role`, { role: newRole });
+      } catch (err) {
+        console.warn('[UserManagementService] Error actualizando rol en backend:', err);
+      }
+    }
+    this.users = this.users.map((u) => (u.id === id ? { ...u, role: newRole } : u));
+    return [...this.users];
+  }
 }
 
 export const userManagementService = new UserManagementService();

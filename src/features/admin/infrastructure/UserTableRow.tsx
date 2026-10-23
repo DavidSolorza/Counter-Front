@@ -10,6 +10,8 @@ interface UserTableRowProps {
   onCancelUser: (id: string) => void;
   onReactivateUser: (id: string) => void;
   onMonitorUser?: (user: ManagedUser) => void;
+  onChangeRole?: (id: string, newRole: 'admin' | 'user') => void;
+  totalAdminsCount?: number;
 }
 
 export const UserTableRow: React.FC<UserTableRowProps> = ({
@@ -18,6 +20,8 @@ export const UserTableRow: React.FC<UserTableRowProps> = ({
   onCancelUser,
   onReactivateUser,
   onMonitorUser,
+  onChangeRole,
+  totalAdminsCount = 1,
 }) => {
   const initials = user.fullName
     .split(' ')
@@ -67,6 +71,8 @@ export const UserTableRow: React.FC<UserTableRowProps> = ({
           onCancelUser={onCancelUser}
           onReactivateUser={onReactivateUser}
           onMonitorUser={onMonitorUser}
+          onChangeRole={onChangeRole}
+          totalAdminsCount={totalAdminsCount}
         />
       </td>
     </tr>

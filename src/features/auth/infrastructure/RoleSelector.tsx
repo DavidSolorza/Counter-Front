@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, UserCheck, Sparkles } from 'lucide-react';
+import { ShieldCheck, UserCheck, Sparkles, Lock } from 'lucide-react';
 import { UserRole } from '../domain/user_session';
 import './RoleSelector.css';
 
@@ -7,13 +7,34 @@ interface RoleSelectorProps {
   currentRole: UserRole;
   onSelectRole: (role: UserRole) => void;
   onQuickLogin: (role: UserRole) => void;
+  allowAdminSelection?: boolean;
 }
 
 export const RoleSelector: React.FC<RoleSelectorProps> = ({
   currentRole,
   onSelectRole,
   onQuickLogin,
+  allowAdminSelection = false,
 }) => {
+  if (!allowAdminSelection) {
+    return (
+      <div className="role-selector-container">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+          <span className="role-selector-label">Rol Asignado por Política</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.72rem', color: '#10b981' }}>
+            <Lock size={11} />
+            <span>Acceso Seguro Restringido</span>
+          </span>
+        </div>
+
+        <div className="role-btn active-user" style={{ cursor: 'default', display: 'flex', justifyContent: 'center' }}>
+          <UserCheck size={16} />
+          <span>Usuario Analista (Acceso Estándar de Telemetría)</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="role-selector-container">
       <span className="role-selector-label">Rol de Acceso Asignado</span>

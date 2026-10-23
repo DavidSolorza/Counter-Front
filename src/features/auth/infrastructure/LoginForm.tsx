@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Lock, Mail, X } from 'lucide-react';
 import { useAuth } from '../application/auth_context';
 import { UserRole } from '../domain/user_session';
+import { accessGovernanceService } from '../application/access_governance_service';
 import { RoleSelector } from './RoleSelector';
 import { GithubLoginButton } from './GithubLoginButton';
 import { GoogleLoginButton } from './GoogleLoginButton';
@@ -17,8 +18,20 @@ export const LoginForm: React.FC = () => {
     isAuthModalOpen,
     closeAuthModal,
   } = useAuth();
-  const [email, setEmail] = useState('admin@counter.io');
-  const [role, setRole] = useState<UserRole>('admin');
+
+  const [allowAdmin, setAllowAdmin] = useState<boolean>(() =>
+    accessGovernanceService.isPublicAdminLoginAllowed()
+  );
+
+  useEffect(() => {
+    return accessGovernanceService.subscribe((allowed) => {
+      setAllowAdmin(allowed);
+      if (!allowed) setRole('user');
+    });
+  }, []);
+
+  const [role, setRole] = useState<UserRole>(() => (allowAdmin ? 'admin' : 'user'));
+  const [email, setEmail] = useState(() => (allowAdmin ? 'admin@counter.io' : 'usuario@empresa.com'));
 
   if (!isAuthModalOpen) return null;
 
@@ -28,22 +41,11 @@ export const LoginForm: React.FC = () => {
   };
 
   const handleQuickLogin = (selectedRole: UserRole) => {
-    const defaultEmail = selectedRole === 'admin' ? 'admin@counter.io' : 'usuario@empresa.com';
+    const finalRole = allowAdmin ? selectedRole : 'user';
+    const defaultEmail = finalRole === 'admin' ? 'admin@counter.io' : 'usuario@empresa.com';
     setEmail(defaultEmail);
-    setRole(selectedRole);
-    login(defaultEmail, selectedRole);
-  };
-
-  const handleRealGithubOAuth = (selectedRole: UserRole) => {
-    loginWithOAuthRedirect(selectedRole);
-  };
-
-  const handleRealGoogleOAuth = (selectedRole: UserRole) => {
-    loginWithGoogleOAuthRedirect(selectedRole);
-  };
-
-  const handleDirectDemoLogin = () => {
-    loginWithGithub(role, 'DavidSolorza');
+    setRole(finalRole);
+    login(defaultEmail, finalRole);
   };
 
   return (
@@ -60,26 +62,28 @@ export const LoginForm: React.FC = () => {
 
         <GithubLoginButton
           currentRole={role}
-          onGithubLogin={handleRealGithubOAuth}
+          onGithubLogin={(r) => loginWithOAuthRedirect(allowAdmin ? r : 'user')}
           isLoading={isAuthenticating}
         />
 
         <GoogleLoginButton
           currentRole={role}
-          onGoogleLogin={handleRealGoogleOAuth}
+          onGoogleLogin={(r) => loginWithGoogleOAuthRedirect(allowAdmin ? r : 'user')}
           isLoading={isAuthenticating}
         />
 
-        <div className="oauth-redirect-link-wrap">
-          <button
-            type="button"
-            className="btn-link-oauth"
-            onClick={handleDirectDemoLogin}
-            title="Iniciar sesión directa de prueba local sin salir a proveedores externos"
-          >
-            <span>O probar sesión local demo (@DavidSolorza)</span>
-          </button>
-        </div>
+        {allowAdmin && (
+          <div className="oauth-redirect-link-wrap">
+            <button
+              type="button"
+              className="btn-link-oauth"
+              onClick={() => loginWithGithub('admin', 'DavidSolorza')}
+              title="Iniciar sesión directa de prueba como Admin"
+            >
+              <span>O probar sesión local demo (@DavidSolorza Admin)</span>
+            </button>
+          </div>
+        )}
 
         <div className="auth-divider">
           <span>o ingresa con correo corporativo</span>
@@ -103,8 +107,9 @@ export const LoginForm: React.FC = () => {
 
           <RoleSelector
             currentRole={role}
-            onSelectRole={setRole}
+            onSelectRole={(r) => setRole(allowAdmin ? r : 'user')}
             onQuickLogin={handleQuickLogin}
+            allowAdminSelection={allowAdmin}
           />
 
           <button type="submit" className="btn-submit">
