@@ -1,95 +1,88 @@
 import { ManagedUser, UserAccountStatus } from '../domain/managed_user';
+import { httpClient } from '../../../core/http/http_client';
+import { APP_CONFIG } from '../../../core/config/app_config';
 
-const INITIAL_MOCK_USERS: ManagedUser[] = [
+const INITIAL_FALLBACK_USERS: ManagedUser[] = [
   {
-    id: 'usr_001',
-    fullName: 'Valeria Restrepo',
-    email: 'valeria.restrepo@empresa.com',
+    id: 'lic_1',
+    fullName: 'Cliente Demo Enterprise',
+    email: 'cliente.demo.enterprise@counter.enterprise',
     role: 'admin',
     status: 'active',
-    department: 'DevOps & Observabilidad',
+    department: 'Infraestructura Global',
     lastActive: 'Hace 5 min',
-    siteKey: 'wk_valeria_devops',
+    siteKey: 'wk_test_12345',
   },
   {
-    id: 'usr_002',
-    fullName: 'Carlos Mendoza',
-    email: 'carlos.mendoza@empresa.com',
+    id: 'lic_2',
+    fullName: 'Streaming Store JP',
+    email: 'streaming.store.jp@counter.enterprise',
     role: 'user',
     status: 'active',
-    department: 'Producto & UX',
+    department: 'Comercio Digital & Media',
     lastActive: 'Hace 23 min',
-    siteKey: 'wk_carlos_mendoza',
-  },
-  {
-    id: 'usr_003',
-    fullName: 'Sofía Navarro',
-    email: 'sofia.navarro@empresa.com',
-    role: 'user',
-    status: 'inactive',
-    department: 'Seguridad de la Información',
-    lastActive: 'Ayer',
-    siteKey: 'wk_sofia_security',
-  },
-  {
-    id: 'usr_004',
-    fullName: 'Mateo Gómez',
-    email: 'mateo.gomez@empresa.com',
-    role: 'user',
-    status: 'active',
-    department: 'Ingeniería Frontend',
-    lastActive: 'Hace 1 hora',
-    siteKey: 'wk_mateo_frontend',
-  },
-  {
-    id: 'usr_005',
-    fullName: 'Elena Silva',
-    email: 'elena.silva@empresa.com',
-    role: 'user',
-    status: 'cancelled',
-    department: 'Auditoría Externa',
-    lastActive: 'Hace 2 semanas',
-    siteKey: 'wk_elena_audit',
-  },
-  {
-    id: 'usr_006',
-    fullName: 'Andrés Morales',
-    email: 'andres.morales@empresa.com',
-    role: 'user',
-    status: 'inactive',
-    department: 'Inteligencia de Datos',
-    lastActive: 'Hace 3 días',
-    siteKey: 'wk_andres_data',
+    siteKey: 'wk_live_demo',
   },
 ];
 
 export class UserManagementService {
-  private users: ManagedUser[] = [...INITIAL_MOCK_USERS];
+  private users: ManagedUser[] = [...INITIAL_FALLBACK_USERS];
 
   public getAll(): ManagedUser[] {
     return [...this.users];
   }
 
-  public updateStatus(id: string, newStatus: UserAccountStatus): ManagedUser[] {
-    this.users = this.users.map((u) => (u.id === id ? { ...u, status: newStatus } : u));
+  public async fetchAll(): Promise<ManagedUser[]> {
+    try {
+      const response = await httpClient.get<ManagedUser[]>(APP_CONFIG.adminUsersUrl);
+      if (Array.isArray(response) && response.length > 0) {
+        this.users = response;
+      }
+    } catch (err) {
+      console.warn('[UserManagementService] Fallback a caché local:', err);
+    }
     return [...this.users];
   }
 
-  public toggleActiveInactive(id: string): ManagedUser[] {
-    this.users = this.users.map((u) => {
-      if (u.id !== id) return u;
-      const nextStatus = u.status === 'active' ? 'inactive' : 'active';
-      return { ...u, status: nextStatus };
-    });
+  public async toggleActiveInactive(id: string): Promise<ManagedUser[]> {
+    const user = this.users.find((u) => u.id === id);
+    if (!user) return [...this.users];
+    const nextStatus: UserAccountStatus = user.status === 'active' ? 'inactive' : 'active';
+    if (user.siteKey) {
+      try {
+        await httpClient.post(`${APP_CONFIG.adminUsersUrl}/${user.siteKey}/toggle`, {});
+      } catch (err) {
+        console.warn('[UserManagementService] Error toggling status in backend:', err);
+      }
+    }
+    this.users = this.users.map((u) => (u.id === id ? { ...u, status: nextStatus } : u));
     return [...this.users];
   }
 
-  public cancelUser(id: string): ManagedUser[] {
-    return this.updateStatus(id, 'cancelled');
+  public async cancelUser(id: string): Promise<ManagedUser[]> {
+    const user = this.users.find((u) => u.id === id);
+    if (user?.siteKey) {
+      try {
+        await httpClient.post(`${APP_CONFIG.adminUsersUrl}/${user.siteKey}/cancel`, {});
+      } catch (err) {
+        console.warn('[UserManagementService] Error cancelling user in backend:', err);
+      }
+    }
+    this.users = this.users.map((u) => (u.id === id ? { ...u, status: 'cancelled' } : u));
+    return [...this.users];
   }
 
-  public reactivateUser(id: string): ManagedUser[] {
-    return this.updateStatus(id, 'active');
+  public async reactivateUser(id: string): Promise<ManagedUser[]> {
+    const user = this.users.find((u) => u.id === id);
+    if (user?.siteKey) {
+      try {
+        await httpClient.post(`${APP_CONFIG.adminUsersUrl}/${user.siteKey}/activate`, {});
+      } catch (err) {
+        console.warn('[UserManagementService] Error reactivating user in backend:', err);
+      }
+    }
+    this.users = this.users.map((u) => (u.id === id ? { ...u, status: 'active' } : u));
+    return [...this.users];
   }
 }
 
